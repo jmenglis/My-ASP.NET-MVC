@@ -22,6 +22,17 @@ namespace SimpleApp.Controllers {
             ViewBag.SelectedColor = Session["color"] = color;
             return View(GetTimeStamps());
         }
+        public ActionResult Modules() {
+            var modules = HttpContext.ApplicationInstance.Modules;
+            Tuple<string, string>[] data =
+                modules.AllKeys
+                    .Select(x => new Tuple<string, string>(
+                        x.StartsWith("__Dynamic") ? x.Split('_', ',')[3] : x,
+                        modules[x].GetType().Name))
+                    .OrderBy(x => x.Item1)
+                    .ToArray();
+            return View(data);
+        }
         private List<string> GetTimeStamps() {
             return new List<string> {
                 string.Format("App timestamp: {0}", HttpContext.Application["app_timestamp"]), string.Format("Request timestamp: {0}", Session["request_timestamp"]),
