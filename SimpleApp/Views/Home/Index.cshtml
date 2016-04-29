@@ -1,5 +1,4 @@
 ﻿@using SimpleApp.Models
-@model List<string>
 @{
     Layout = null;
 }
@@ -42,23 +41,6 @@
                 <tr><td>@c</td><td>@Votes.GetVotes(c)</td></tr>
             }
         </table>
-    </div>
-    <div class="panel panel-primary">
-        <h5 class="panel-heading">Events</h5>
-        <table class="table table-condensed table-striped">
-            @foreach (string eventName in Model) {
-                <tr><td>@eventName</td></tr>
-            }
-        </table>
-        <div class="panel panel-primary">
-            <h5 class="panel-heading">Request Property</h5>
-            <table class="table table-condensed table-striped">
-                <tr><th>Property</th><th>Value</th></tr>
-                <tr><td>HttpMethod</td><td>@Request.HttpMethod</td></tr>
-                <tr><td>IsLocal</td><td>@Request.IsLocal</td></tr>
-                <tr><td>RawURL</td><td>@Request.RawUrl</td></tr>
-            </table>
-        </div>
     </div>
 </body>
 </html>
