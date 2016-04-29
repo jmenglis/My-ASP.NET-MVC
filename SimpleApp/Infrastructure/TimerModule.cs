@@ -5,7 +5,11 @@ using System.Linq;
 using System.Web;
 
 namespace SimpleApp.Infrastructure {
+    public class RequestTimerEventArgs : EventArgs {
+        public float Duration { get; set; }
+    }
     public class TimerModule : IHttpModule {
+        public event EventHandler<RequestTimerEventArgs> RequestTimed;
         private Stopwatch timer;
 
 
@@ -19,9 +23,13 @@ namespace SimpleApp.Infrastructure {
             if (ctx.CurrentNotification == RequestNotification.BeginRequest) {
                 timer = Stopwatch.StartNew();
             } else {
+                float duration = ((float)timer.ElapsedTicks) / Stopwatch.Frequency;
                 ctx.Response.Write(string.Format(
-                "<div class='alert alert-success'>Elapsed {0:F5} seconds</div>",
-            ((float)timer.ElapsedTicks) / Stopwatch.Frequency));
+                "<div class='alert alert-success'>Elapsed {0:F5} seconds</div>", duration));
+                if (RequestTimed != null) {
+                    RequestTimed(this, new RequestTimerEventArgs { Duration = duration });
+                }
+                
             }
         }
         public void Dispose() {
